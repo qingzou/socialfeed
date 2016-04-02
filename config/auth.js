@@ -1,20 +1,13 @@
-// config/auth.js
+//throw new Error('Not implemented.')
 module.exports = {
-  'development': {
     'facebook': {
-      'consumerKey': '...',
-      'consumerSecret': '...',
-      'callbackUrl': '...'
+      'clientID': '779718192162027',
+      'clientSecret': 'b20b6a3abcdd4f62fb2ea4bb0dc7f52f',
+      'callbackUrl': 'http://socialauthenticator.com:8000/auth/facebook/callback'
     },
     'twitter': {
-      'consumerKey': 'OaPwwyfXjd8WkPzPEWPlpT6Fs',
-      'consumerSecret': '...',
-      'callbackUrl': 'http://social-authenticator.com:8000/auth/twitter/callback'
-    },
-    'google': {
-      'consumerKey': '446585441765-unda5mjs6307q1pqobvhiqj87m9m2kh1.apps.googleusercontent.com',
-      'consumerSecret': '...',
-      'callbackUrl': 'http://social-authenticator.com:8000/auth/google/callback'
+      consumerKey: 'UFkYa4ESoHPbAVEJvwtCErrIo',
+      consumerSecret: 'slUR4kwmiWVobLzNQxti9nTcCE8caqBlPwCqf9hM6iBeuXaHCl',
+      callbackUrl: 'http://socialauthenticator.com:8000/auth/twitter/callback'
     }
-  }
 }

@@ -1,7 +1,3 @@
-// config/database.js
 module.exports = {
-  'development': {
-    'type': 'mongo',
-    'url': 'mongodb://127.0.0.1:27017/social-feed'
-  }
+    'url': 'mongodb://localhost:27017/authentication'
 }
