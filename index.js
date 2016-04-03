@@ -202,5 +202,31 @@ require('./app/routes')(app)
 
   }))
 
+  app.post('/share/:id', isLoggedIn, then(async (req, res) => {
+        let twitterClient = new Twitter({
+            consumer_key: config.auth.twitter.consumerKey,
+            consumer_secret: config.auth.twitter.consumerSecret,
+            access_token_key: req.user.twitter.token,
+            access_token_secret: req.user.twitter.refresh_token
+         })
+         let id = req.params.id
+         console.log('id' + id)
+         await twitterClient.promise.post('statuses/retweet/:id',{id})
+         res.end()
+    }))
+
+   app.post('/reply/:id', isLoggedIn, then(async (req, res) => {
+          let twitterClient = new Twitter({
+              consumer_key: config.auth.twitter.consumerKey,
+              consumer_secret: config.auth.twitter.consumerSecret,
+              access_token_key: req.user.twitter.token,
+              access_token_secret: req.user.twitter.refresh_token
+           })
+           let id = req.params.id
+           console.log('id' + id)
+           await twitterClient.promise.post('statuses/update', {in_reply_to_status_id})
+           res.end()
+      }))
+
 
 app.listen(port, ()=> console.log(`Listening @ http://127.0.0.1:${port}`))
