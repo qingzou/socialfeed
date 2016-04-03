@@ -108,11 +108,11 @@ function useExternalPassportStrategy(OauthStrategy, config, field) {
            },
            // twitter will send back the tokens and profile
            function(req, token, refresh_token, profile, done) {
-             console.log(profile)
+
              // asynchronous
              process.nextTick(function() {
                 if (!req.user) {
-                  console.log(profile)
+
                   User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
                      if (err)
                        return done(err);
@@ -173,20 +173,20 @@ function useExternalPassportStrategy(OauthStrategy, config, field) {
     }
 }
 var isValidPassword = function(user, password){
-        console.log('user password' + user.passowrd + " password " + password)
+        //console.log('user password' + user.passowrd + " password " + password)
         return user.password === password; //bCrypt.compareSync(password, user.password);
 }
 
 function configure(config) {
   // Required for session support / persistent login sessions
    passport.serializeUser(function(user, done) {
-          console.log('serializing user: ');console.log(user);
+          //console.log('serializing user: ');console.log(user);
           done(null, user._id);
       });
 
    passport.deserializeUser(function(id, done) {
           User.findById(id, function(err, user) {
-              console.log('deserializing user:',user);
+              //console.log('deserializing user:',user);
               done(err, user);
           });
       });

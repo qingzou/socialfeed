@@ -126,7 +126,7 @@ require('./app/routes')(app)
 
      var newtweets = tweets.map(tweet => {
        return {
-            id:tweet.id,
+            id:tweet.id_str,
             text: tweet.text,
             image:tweet.user.profile_image_url,
             name:tweet.user.name,
@@ -139,12 +139,68 @@ require('./app/routes')(app)
             }
         }
      })
-     console.log('id' + newtweets[0].id)
-     console.log('network' + newtweets[0].network.class)
      res.render('timeline.ejs', {
          posts: newtweets
      })
 
   }))
+
+
+  app.get('/compose', isLoggedIn,  (req, res) => {
+     res.render('compose.ejs')
+
+  })
+
+  app.post('/compose', isLoggedIn, then(async (req, res) => {
+    let status = req.body.test
+     console.log('in compose, post text is ' + status)
+      // console.log(req)
+     /* if (status.length > 140) {
+       req.flash('error', 'status is over 140 characters!')
+      }
+      if (!status) {
+             req.flash('error', 'text can not be empty!')
+      }*/
+     let twitterClient = new Twitter({
+              consumer_key: config.auth.twitter.consumerKey,
+              consumer_secret: config.auth.twitter.consumerSecret,
+              access_token_key: req.user.twitter.token,
+              access_token_secret: req.user.twitter.refresh_token
+      })
+
+      await twitterClient.promise.post('statuses/update', {status})
+      res.redirect('/timeline')
+  }))
+
+
+  app.post('/like/:id', isLoggedIn, then(async (req, res) => {
+      let twitterClient = new Twitter({
+          consumer_key: config.auth.twitter.consumerKey,
+          consumer_secret: config.auth.twitter.consumerSecret,
+          access_token_key: req.user.twitter.token,
+          access_token_secret: req.user.twitter.refresh_token
+       })
+       let id = req.params.id
+       console.log('id' + id)
+       await twitterClient.promise.post('favorites/create', {id})
+       res.end()
+  }))
+
+  app.post('/unlike/:id', isLoggedIn, then(async (req, res) => {
+
+     let twitterClient = new Twitter({
+            consumer_key: config.auth.twitter.consumerKey,
+            consumer_secret: config.auth.twitter.consumerSecret,
+            access_token_key: req.user.twitter.token,
+            access_token_secret: req.user.twitter.refresh_token
+     })
+
+      let id = req.params.id
+      console.log('id ' + id)
+      await twitterClient.promise.post('favorites/destroy', {id})
+      res.end()
+
+  }))
+
 
 app.listen(port, ()=> console.log(`Listening @ http://127.0.0.1:${port}`))
