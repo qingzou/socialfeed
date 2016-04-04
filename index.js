@@ -215,7 +215,27 @@ require('./app/routes')(app)
          res.end()
     }))
 
+  app.get('/reply/:id', isLoggedIn, then(async (req, res) => {
+
+        let twitterClient = new Twitter({
+            consumer_key: config.auth.twitter.consumerKey,
+            consumer_secret: config.auth.twitter.consumerSecret,
+            access_token_key: req.user.twitter.token,
+            access_token_secret: req.user.twitter.refresh_token
+         })
+         let id = req.params.id
+         console.log('id ' + id)
+         let result = await twitterClient.promise.get('statuses/show', {id})
+
+         res.render('reply.ejs', {
+              post: result[0]
+         })
+    }))
+
+
    app.post('/reply/:id', isLoggedIn, then(async (req, res) => {
+
+          console.log('come in reply post')
           let twitterClient = new Twitter({
               consumer_key: config.auth.twitter.consumerKey,
               consumer_secret: config.auth.twitter.consumerSecret,
@@ -224,6 +244,7 @@ require('./app/routes')(app)
            })
            let id = req.params.id
            console.log('id' + id)
+           console.log(req )
            await twitterClient.promise.post('statuses/update', {in_reply_to_status_id})
            res.end()
       }))
